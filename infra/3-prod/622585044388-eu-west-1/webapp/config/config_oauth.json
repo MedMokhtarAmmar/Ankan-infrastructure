@@ -1,0 +1,33 @@
+{
+  "apiUrl": "${api_url}",
+  "amplify": {
+    "Auth": {
+      "identityPoolId": "${identityPoolId}",
+      "mandatorySignIn": true,
+      "region":  "${amplify_region}",
+      "userPoolId": "${amplify_pool_id}",
+      "userPoolWebClientId": "${amplify_client_id}",
+      "oauth": {
+        "domain": "${domain_name}.auth.${aws_region}.amazoncognito.com",
+        "scope": ["email" ,"openid","profile","aws.cognito.signin.user.admin"],
+        "responseType": "code",
+        "redirectSignIn": "${callback_urls}",
+        "redirectSignOut": "${logout_urls}",
+        "options": {
+          "AdvancedSecurityDataCollectionFlag": false
+        }
+      }
+    },
+    "Storage": {
+      "AWSS3": {
+        "bucket": "${upload_bucket_name}",
+        "region": "${upload_bucket_region}"
+      },
+      "customPrefix": {
+        "public": "public/",
+        "protected": "protected/",
+        "private": "private/"
+      }
+    }
+  }
+}

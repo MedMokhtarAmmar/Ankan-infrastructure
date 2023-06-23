@@ -1,0 +1,24 @@
+
+{
+  "apiUrl": "${api_url}",
+  "amplify": {
+    "Auth": {
+      "identityPoolId": "${identityPoolId}",
+      "mandatorySignIn": true,
+      "region":  "${amplify_region}",
+      "userPoolId": "${amplify_pool_id}",
+      "userPoolWebClientId": "${amplify_client_id}"
+    },
+    "Storage": {
+      "AWSS3": {
+        "bucket": "${upload_bucket_name}",
+        "region": "${upload_bucket_region}"
+      },
+      "customPrefix": {
+        "public": "public/",
+        "protected": "protected/",
+        "private": "private/"
+      }
+    }
+  }
+}

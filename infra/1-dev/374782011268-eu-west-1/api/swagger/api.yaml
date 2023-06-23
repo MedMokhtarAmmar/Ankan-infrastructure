@@ -1,0 +1,3412 @@
+openapi: 3.0.0
+info:
+  title: ankan-api
+  description: This is a list API of ankan
+  contact:
+    email: mokhtarammar.ma@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0-oas3
+servers:
+  - url: https://dev.api.ankan.fr
+tags:
+  - name: Users
+    description: Users apis
+  - name: Projects
+    description: Projects apis
+  - name: Documents
+    description: Documents apis
+  - name: Portfolios
+    description: Portfolios api's
+  - name: Pieces
+    description: Pieces api's
+  - name: Suivis
+    description: Suivis api's
+  - name: Partenaires
+    description: partenaires api's
+  - name: Messages
+    description: messages api's
+  - name: Conversations
+    description: conversations api's
+  - name: CateoriePieces
+    description: CateoriePieces api's
+  - name: notifications
+    description: notifications api's
+  - name: Modeles
+    description: models api's
+  - name: ListPiece
+    description: liste api's
+
+paths:
+  /users:
+    get:
+      operationId: getUsers
+      description: get Users
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/users'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: get user by email
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+
+    post:
+      operationId: postUser
+      description: Add a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/User'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Users
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Users
+
+  /users/{userID}:
+    get:
+      operationId: getUserById
+      description: get User by id
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/user'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Users
+    delete:
+      operationId: deleteUserById
+      description: delete User by id
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Users
+    put:
+      operationId: ModifierUserById
+      description: get User by id
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/user'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Users
+    options:
+      operationId: OptionUserById
+      description: option User by id
+      parameters:
+        - $ref: '#/components/parameters/userID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Users
+
+
+
+
+
+
+
+
+
+  /project:
+    get:
+      operationId: getProjects
+      description: get Projects
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/projects'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Projects
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          description: get the projects of the client by the `clientID`
+        - in: query
+          name: courtierID
+          schema:
+            type: string
+          description: get the projects of the courtier `courtierID`
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postProject
+      description: Add a new Project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/Project'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Projects
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Projects
+
+  /project/{projectID}:
+    get:
+      operationId: getProjectById
+      description: get Project by id
+      parameters:
+        - $ref: '#/components/parameters/projectID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/project'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Projects
+    delete:
+      operationId: deleteProjectById
+      description: delete Project by id
+      parameters:
+        - $ref: '#/components/parameters/projectID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Projects
+    put:
+      operationId: ModifierProjectById
+      description: get Project by id
+      parameters:
+        - $ref: '#/components/parameters/projectID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/project'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Projects
+    options:
+      operationId: OptionProjectById
+      description: option Project by id
+      parameters:
+        - $ref: '#/components/parameters/projectID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Projects
+
+
+
+
+
+
+
+
+  /document:
+    get:
+      operationId: getDocuments
+      description: get Documents
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/documents'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Documents
+      parameters:
+        - in: query
+          name: uploaderID
+          schema:
+            type: string
+          description: get the documents of the uploader with this id
+        - in: query
+          name: pieceID
+          schema:
+            type: string
+          description: get the documents of the piece with this id
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+
+    post:
+      operationId: postDocument
+      description: Add a new Document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/Document'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Documents
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Documents
+
+  /document/{documentID}:
+    get:
+      operationId: getDocumenttById
+      description: get Document by id
+      parameters:
+        - $ref: '#/components/parameters/documentID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/document'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Documents
+    delete:
+      operationId: deleteDocumentById
+      description: delete Document by id
+      parameters:
+        - $ref: '#/components/parameters/documentID'
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Documents
+    put:
+      operationId: ModifierDocumentById
+      description: get Document by id
+      parameters:
+        - $ref: '#/components/parameters/documentID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/document'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Documents
+    options:
+      operationId: OptionDocumentById
+      description: option Document by id
+      parameters:
+        - $ref: '#/components/parameters/documentID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Documents
+
+
+
+
+
+  /portfolios:
+    get:
+      operationId: getPortfolios
+      description: get Portfolios
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/portfolios'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Portfolios
+      parameters:
+        - in: query
+          name: idProject
+          schema:
+            type: string
+          description: get portfolio by `projectID`
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postPortfolio
+      description: Add a new Portfolio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolio'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/portfolio'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Portfolios
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Portfolios
+
+  /portfolios/{portfolioID}:
+    get:
+      operationId: getPortfolioById
+      description: get Portfolio by id
+      parameters:
+        - $ref: '#/components/parameters/portfolioID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/portfolio'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Portfolios
+    delete:
+      operationId: deletePortfolioById
+      description: delete portfolio by id
+      parameters:
+        - $ref: '#/components/parameters/portfolioID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Portfolios
+    put:
+      operationId: ModifierPortfolioById
+      description: Modifier Portfolio by id
+      parameters:
+        - $ref: '#/components/parameters/portfolioID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/portfolio'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Portfolios
+    options:
+      parameters:
+        - $ref: '#/components/parameters/portfolioID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Portfolios
+
+
+  /pieces:
+    get:
+      operationId: getpieces
+      description: get pieces
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/pieces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Pieces
+      parameters:
+        - in: query
+          name: projetID
+          schema:
+            type: string
+          description: get the pieces of the project
+        - in: query
+          name: uploaderID
+          schema:
+            type: string
+          description: get the pieces of the project
+        - in: query
+          name: page
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+
+    post:
+      operationId: postPieces
+      description: Add a new Piece
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Piece'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/Piece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Pieces
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Pieces
+
+  /pieces/{pieceID}:
+    get:
+      operationId: getPieceById
+      description: get piece by id
+      parameters:
+        - $ref: '#/components/parameters/pieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/piece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Pieces
+    delete:
+      operationId: deletePieceById
+      description: delete piece by id
+      parameters:
+        - $ref: '#/components/parameters/pieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Pieces
+    put:
+      operationId: ModifierPieceById
+      description: get piece by id
+      parameters:
+        - $ref: '#/components/parameters/pieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/piece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Pieces
+    options:
+      operationId: OptionPieceById
+      description: option piece by id
+      parameters:
+        - $ref: '#/components/parameters/pieceID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Pieces
+
+
+
+  /suivis:
+    get:
+      operationId: getSuivis
+      description: get suivis
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/suivis'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Suivis
+      parameters:
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+        - in: query
+          name: idProjet
+          schema:
+            type: string
+          description: get suvis by `projectID`
+    post:
+      operationId: postSuivi
+      description: Add a new Suivi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Suivi'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/suivi'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Suivis
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Suivis
+
+  /suivis/{suiviID}:
+    get:
+      operationId: getSuiviById
+      description: get Suivi by id
+      parameters:
+        - $ref: '#/components/parameters/suiviID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/suivi'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Suivis
+    delete:
+      operationId: deleteSuiviById
+      description: delete Suivi by id
+      parameters:
+        - $ref: '#/components/parameters/suiviID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Suivis
+    put:
+      operationId: ModifierSuiviById
+      description: Modifier Suivi by id
+      parameters:
+        - $ref: '#/components/parameters/suiviID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/suivi'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Suivis
+    options:
+      parameters:
+        - $ref: '#/components/parameters/suiviID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Suivis
+
+
+  /partenaire:
+    get:
+      operationId: getPartenaire
+      description: get partenaires
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/partenaires'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Partenaires
+      parameters:
+        - in: query
+          name: partenaireEmail
+          schema:
+            type: string
+          description: get Partenaire by email
+
+        - in: query
+          name: Iduser
+          schema:
+            type: string
+          description: get Partenaire by `Iduser`
+
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postPartenaire
+      description: Add a new partenaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Partenaire'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/partenaire'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Partenaires
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Partenaires
+
+  /partenaire/{partenaireID}:
+    get:
+      operationId: getPartenaireById
+      description: get Partenaire by id
+      parameters:
+        - $ref: '#/components/parameters/partenaireID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/partenaire'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Partenaires
+    delete:
+      operationId: deletePartenaireById
+      description: delete Partenaire by id
+      parameters:
+        - $ref: '#/components/parameters/partenaireID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Partenaires
+    put:
+      operationId: ModifierPartanairesById
+      description: Modifier Partenaires by id
+      parameters:
+        - $ref: '#/components/parameters/partenaireID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/partenaire'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Partenaires
+    options:
+      parameters:
+        - $ref: '#/components/parameters/partenaireID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Partenaires
+
+
+  /message:
+    get:
+      operationId: getMessage
+      description: get Messages
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/messages'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Messages
+      parameters:
+        - in: query
+          name: senderID
+          schema:
+            type: string
+          description: get message by senderID
+
+        - in: query
+          name: conversationID
+          schema:
+            type: string
+          description: get message by conversation ID
+
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postMessage
+      description: Add a new message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/message'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Messages
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Messages
+  /message/{messageID}:
+    get:
+      operationId: getMessageById
+      description: get Message by id
+      parameters:
+        - $ref: '#/components/parameters/messageID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/message'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Messages
+    delete:
+      operationId: deleteMessageById
+      description: delete Message by id
+      parameters:
+        - $ref: '#/components/parameters/messageID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Messages
+    put:
+      operationId: ModifierMessageById
+      description: Modifier Messages by id
+      parameters:
+        - $ref: '#/components/parameters/messageID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/message'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Messages
+    options:
+      parameters:
+        - $ref: '#/components/parameters/messageID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Messages
+
+  /conversation:
+    get:
+      operationId: getConversation
+      description: get Conversations
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/conversations'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Conversations
+      parameters:
+        - in: query
+          name: projetID
+          schema:
+            type: string
+          description: get conversation by project id
+        - in: query
+          name: documentID
+          schema:
+            type: string
+          description: get conversation by document id
+
+        - in: query
+          name: projetPieceID
+          schema:
+            type: string
+          description: get conversation by piece ID
+
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: get page
+        - in: query
+          name: perPage
+          schema:
+            type: string
+          description: number of result per page
+    post:
+      operationId: postConversation
+      description: Add a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/conversation'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Conversations
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Conversations
+  /conversation/{conversationID}:
+    get:
+      operationId: getConversationById
+      description: get Conversation by id
+      parameters:
+        - $ref: '#/components/parameters/conversationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/conversation'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Conversations
+    delete:
+      operationId: deleteConversationById
+      description: delete Conversation by id
+      parameters:
+        - $ref: '#/components/parameters/conversationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Conversations
+    put:
+      operationId: ModifierConversationById
+      description: Modifier Conversations by id
+      parameters:
+        - $ref: '#/components/parameters/conversationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/conversation'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Conversations
+    options:
+      parameters:
+        - $ref: '#/components/parameters/conversationID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Conversations
+
+
+
+
+  /categoriePieces:
+    get:
+      operationId: getCategoriePieces
+      description: get categoriePieces
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/categoriePieces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - CateoriePieces
+      parameters:
+        - in: query
+          name: libelle
+          schema:
+            type: string
+          description: get conversation by libelle
+
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postcategoriePieces
+      description: Add a new categoriePieces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/categoriePiece'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/categoriePiece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - CateoriePieces
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - CateoriePieces
+  /categoriePieces/{categoriePieceID}:
+    get:
+      operationId: getcategoriePieceById
+      description: get categoriePieces by id
+      parameters:
+        - $ref: '#/components/parameters/categoriePieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/categoriePiece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - CateoriePieces
+    delete:
+      operationId: deletecategoriePieceById
+      description: delete categoriePiece by id
+      parameters:
+        - $ref: '#/components/parameters/categoriePieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - CateoriePieces
+    put:
+      operationId: ModifiercategoriePieceById
+      description: Modifier categoriePiece by id
+      parameters:
+        - $ref: '#/components/parameters/categoriePieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/categoriePieces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - CateoriePieces
+    options:
+      parameters:
+        - $ref: '#/components/parameters/categoriePieceID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - CateoriePieces
+
+
+
+
+
+  /notification:
+    get:
+      operationId: getNotificationq
+      description: get notifications
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/notifications'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - notifications
+      parameters:
+        - in: query
+          name: messageID
+          schema:
+            type: string
+          description: get notification by `messageID`
+        - in: query
+          name: userID
+          schema:
+            type: string
+          description: get notification by `userID`
+
+        - in: query
+          name: page
+
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+    post:
+      operationId: postNotification
+      description: Add a new notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/notification'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/notification'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - notifications
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - notifications
+  /notification/{notificationID}:
+    get:
+      operationId: getnotificationId
+      description: get notification by id
+      parameters:
+        - $ref: '#/components/parameters/notificationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/notification'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - notifications
+    delete:
+      operationId: deletenotificationById
+      description: delete notification by id
+      parameters:
+        - $ref: '#/components/parameters/notificationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - notifications
+    put:
+      operationId: ModifiernotificationById
+      description: Modifier notification by id
+      parameters:
+        - $ref: '#/components/parameters/notificationID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/notification'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - notifications
+    options:
+      parameters:
+        - $ref: '#/components/parameters/notificationID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - notifications
+
+
+
+
+
+
+  /modeles:
+    get:
+      operationId: getmodeles
+      description: get models
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/modeles'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Modeles
+      parameters:
+        - in: query
+          name: modelName
+          schema:
+            type: string
+          description: get the modelsby name
+        - in: query
+          name: page
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+
+    post:
+      operationId: postmodels
+      description: Add a new models
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modele'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/modele'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Modeles
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Modeles
+
+  /modeles/{modeleID}:
+    get:
+      operationId: getModeleById
+      description: get piece by id
+      parameters:
+        - $ref: '#/components/parameters/modeleID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/modele'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Modeles
+    delete:
+      operationId: deleteModeleById
+      description: delete modele by id
+      parameters:
+        - $ref: '#/components/parameters/modeleID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Modeles
+    put:
+      operationId: ModifiermodeleById
+      description: get modele by id
+      parameters:
+        - $ref: '#/components/parameters/modeleID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/modele'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - Modeles
+    options:
+      operationId: OptionModeleById
+      description: option modele by id
+      parameters:
+        - $ref: '#/components/parameters/modeleID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Modeles
+
+
+
+
+
+
+  /listPiece:
+    get:
+      operationId: getlistPiece
+      description: get listPiece
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/listPieces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - ListPieces
+      parameters:
+        - in: query
+          name: listName
+          schema:
+            type: string
+          description: get the list by name
+        - in: query
+          name: page
+          schema:
+            type: string
+            minimum: 1
+          description: get page Must be used with `perPage`
+        - in: query
+          name: perPage
+          schema:
+            type: string
+            minimum: 1
+          description: number of result per page must be used with `page`
+
+    post:
+      operationId: postlist
+      description: Add a new list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/listPiece'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/schemas/listPiece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - ListPieces
+    options:
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - Modeles
+
+  /listPiece/{listPieceID}:
+    get:
+      operationId: getListPieceById
+      description: get ListPiece by id
+      parameters:
+        - $ref: '#/components/parameters/listPieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/listPiece'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - ListPieces
+    delete:
+      operationId: deletelistPieceById
+      description: delete listPiece by id
+      parameters:
+        - $ref: '#/components/parameters/listPieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/2xxSucces'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - ListPieces
+    put:
+      operationId: ModifierlistPieceById
+      description: get listPiece by id
+      parameters:
+        - $ref: '#/components/parameters/listPieceID'
+      security:
+        - example-CognitoUserPoolAuthorizer: []
+      x-amazon-apigateway-integration:
+        uri: "${lambda_api_arn}"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        timeoutInMillis: ${lambda_timeout}
+        type: "aws_proxy"
+      responses:
+        200:
+          $ref: '#/components/responses/modele'
+        500:
+          $ref: '#/components/responses/500APIError'
+        400:
+          $ref: '#/components/responses/4xxClientError'
+      tags:
+        - ListPieces
+    options:
+      operationId: OptionlistPieceById
+      description: option listPiece by id
+      parameters:
+        - $ref: '#/components/parameters/listPieceID'
+      responses:
+        200:
+          $ref: '#/components/responses/cors'
+        400:
+          $ref: '#/components/responses/cors'
+        500:
+          $ref: '#/components/responses/cors'
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'7200'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        timeoutInMillis: 29000
+        requestTemplates:
+          application/json: "{ \"statusCode\": 200 }"
+        type: "mock"
+      tags:
+        - ListPieces
+
+
+
+
+
+
+
+components:
+  parameters:
+    userID:
+      description: User identifier
+      in: path
+      name: userID
+      schema:
+        type: string
+      required: true
+    projectID:
+      description: Project identifier
+      in: path
+      name: projectID
+      schema:
+        type: string
+      required: true
+    documentID:
+      description: Document identifier
+      in: path
+      name: documentID
+      schema:
+        type: string
+      required: true
+    portfolioID:
+      name: portfolioID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: portfolio identifier
+    pieceID:
+      name: pieceID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: piece identifier
+    suiviID:
+      name: suiviID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: suivi identifier
+    partenaireID:
+      name: partenaireID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: partenaire identifier
+    messageID:
+      name: messageID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: message identifier
+    conversationID:
+      name: conversationID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: conversation identifier
+    categoriePieceID:
+      name: categoriePieceID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: categoriePiece identifier
+    notificationID:
+      name: notificationID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: notification identifier
+    modeleID:
+      name: modeleID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: modele identifier
+    listPieceID:
+      name: listPieceID
+      in: path
+      schema:
+        type: string
+      required: true
+      description: listPiece identifier
+
+  schemas:
+    User:
+      type: object
+      title: User
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        userAddress:
+          type: string
+        userPhone:
+          type: string
+        username:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+    Project:
+      type: object
+      title: Project
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        projectName:
+          type: string
+
+        clienID:
+          type: string
+          format: mangodb objectid()
+
+        courtierID:
+          type: string
+          format: mangodb objectid()
+
+        status:
+          type: string
+          enum:
+            - NEW
+            - IN_PROGRESS
+            - WAITING
+            - FINISHED
+
+        lastConsultationDay:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+    Document:
+      type: object
+      title: Document
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        documentTitle:
+          type: string
+
+        documentDescription:
+          type: string
+        documentPath:
+          type: string
+        extension:
+          type: string
+        uploaderID:
+          type: string
+          format: mangodb objectid()
+        pieceID:
+          type: string
+          format: mangodb objectid()
+        documentStatus:
+          type: string
+          enum:
+            - NEW
+            - WAITING
+            - VERIFIED
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Portfolio:
+      type: object
+      title: Portfolio
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        portfolioName:
+          type: string
+        idProject:
+          type: string
+          format: mongodb objectid()
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Piece:
+      type: object
+      title: Piece
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        pieceName:
+          type: string
+        description:
+          type: string
+        projetID:
+          type: string
+          format: mangodb objectid()
+        uploaderID:
+          type: string
+          format: mangodb objectid()
+        categorieID:
+          type: string
+          format: mangodb objectid()
+        pieceStatus:
+          type: string
+          enum:
+            - NEW
+            - WAITING
+            - VERIFIED
+        modelPiece:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Suivi:
+      type: object
+      title: Suivi
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        mode:
+          type: string
+        sendingStatus:
+          type: string
+        lienSuivi:
+          type: string
+        idProjet:
+          type: string
+          format: mangodb objectid()
+        idPartenaire:
+          type: string
+          format: mangodb objectid()
+        idUser:
+          type: string
+          format: mangodb objectid()
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Partenaire:
+      type: object
+      title: Partenaire
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+
+        partenaireCivility:
+          type: string
+        partenaireNom:
+          type: string
+        partenairePrenom:
+          type: string
+        partenairePhone:
+          type: string
+        partenaireEmail:
+          type: string
+        partenaireAddress:
+          type: string
+        partenaireEstablishment:
+          type: string
+        partenaireSiren:
+          type: string
+        partenaireServiceName:
+          type: string
+        address2:
+          type: string
+        address3:
+          type: string
+        codePostal:
+          type: string
+        Iduser:
+          type: string
+          format: mangodb objectid()
+        ville:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        partnerStatus:
+          type: string
+          enum:
+            - CONFIRME
+            - NON_CONFIRME
+
+    Message:
+      type: object
+      title: Message
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+
+        messageText:
+          type: string
+
+        senderID:
+          type: string
+          format: mangodb objectid()
+        conversationID:
+          type: string
+          format: mangodb objectid()
+        duration:
+          type: string
+          format: date-time
+
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Conversation:
+      type: object
+      title: Conversation
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+
+        title:
+          type: string
+
+        projetID:
+          type: string
+          format: mangodb objectid()
+        projetPieceID:
+          type: string
+          format: mangodb objectid()
+        documentID:
+          type: string
+          format: mangodb objectid()
+
+
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    categoriePiece:
+      type: object
+      title: categoriePiece
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+
+        libelle:
+          type: string
+
+        description:
+          type: string
+
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+
+    notification:
+      type: object
+      title: notification
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+
+        title:
+          type: string
+
+        messageID:
+          type: string
+          format: mangodb objectid()
+        userID:
+          type: string
+          format: mangodb objectid()
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - LUS
+            - NON_LUS
+            - ARCHIVES
+            - SUPPRIMES
+        objectID:
+          type: string
+        typeNotification:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+
+    modele:
+      type: object
+      title: Modele
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        modelName:
+          type: string
+        description:
+          type: string
+        modelPiece:
+          type: string
+        categorieID:
+          type: string
+          format: mangodb objectid()
+
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+
+
+    listPiece:
+      type: object
+      title: ListPiece
+      properties:
+        id:
+          type: string
+          format: mangodb objectid()
+        listName:
+          type: string
+        description:
+          type: string
+        models:
+          type: array
+          items:
+            type: string
+
+
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+
+
+    Empty:
+      title: "Empty Schema"
+      type: "object"
+
+
+  responses:
+    2xxSucces:
+      description: The specified operation done with succes .
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: "200"
+              message:
+                type: string
+                example: The specified excecuted with success
+    404NotFound:
+      description: The specified resource was not found.
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: "404"
+              message:
+                type: string
+                example: The specified resource was not found
+    4xxClientError:
+      description: Client error.
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: "401"
+              message:
+                type: string
+                example: Unauthorized
+    500APIError:
+      description: Unexpected error
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: string
+                example: "500"
+              message:
+                type: string
+                example: This is an error
+
+    users:
+      description: users
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+
+
+    projects:
+      description: projects
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Project'
+    documents:
+      description: documents
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Document'
+
+    portfolios:
+      description: portfolios
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Portfolio'
+
+    pieces:
+      description: pieces
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Piece'
+
+    suivis:
+      description: suivis
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Suivi'
+
+    partenaires:
+      description: partenaires
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Partenaire'
+
+    messages:
+      description: messages
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Message'
+
+    conversations:
+      description: conversations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Conversation'
+
+    categoriePieces:
+      description: categoriePieces
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/categoriePiece'
+
+    notifications:
+      description: notifications
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/notification'
+
+
+    modeles:
+      description: modeles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/modele'
+
+
+
+    listPieces:
+      description: ListPieces
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/listPiece'
+
+
+    user:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+
+    project:
+      description: Project
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Project'
+
+    document:
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Document'
+
+    piece:
+      description: Piece
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Piece'
+
+
+    portfolio:
+      description: Portfolio
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Portfolio'
+
+    suivi:
+      description: Suivi
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Suivi'
+
+    partenaire:
+      description: Partenaire
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Partenaire'
+
+    message:
+      description: Message
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+
+    conversation:
+      description: Conversation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Conversation'
+
+    categoriePiece:
+      description: categoriePiece
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/categoriePiece'
+
+    notification:
+      description: notification
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/notification'
+
+
+    modele:
+      description: Modele
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/modele'
+
+
+    listPiece:
+      description: listPiece
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listPiece'
+
+    cors:
+      description: "200 response"
+      headers:
+        Access-Control-Allow-Origin:
+          schema:
+            type: "string"
+        Access-Control-Allow-Methods:
+          schema:
+            type: "string"
+        Access-Control-Max-Age:
+          schema:
+            type: "string"
+        Access-Control-Allow-Headers:
+          schema:
+            type: "string"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Empty"
+  securitySchemes:
+    example-CognitoUserPoolAuthorizer:
+      type: "apiKey"
+      name: "Authorization"
+      in: "header"
+      x-amazon-apigateway-authtype: "cognito_user_pools"
+      x-amazon-apigateway-authorizer:
+        providerARNs:
+          - "${cognito_user_pool_arn}"
+        type: "cognito_user_pools"

@@ -1,0 +1,199 @@
+{
+	"id": "ca6f87dd-83cc-46d8-ae02-2e68190d8703",
+	"name": "ankan",
+	"values": [
+		{
+			"key": "token",
+			"value": "eyJraWQiOiJVOU1uMytYb1wvdmlkSDFza1B5ZUpCUDUxbjhSa2RPUUFxN1lQU2FYSWZ0Yz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1NzU5MTdmYi1kNjczLTQwMzUtOGYzMS0wOWY5ODM4OTBlZWMiLCJhdWQiOiIzZGFpN3JyM2kxaW9sZTF2MjQwa3FjMjQzOSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZXZlbnRfaWQiOiI2ODc2OTY1Mi0xYmNkLTQzOWQtOTAwMy0zYzcxODhhYzdkYmMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTYwNTUxNzM2MywicHJvZmlsZSI6IkNPVVJUSUVSIiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LXdlc3QtMS5hbWF6b25hd3MuY29tXC9ldS13ZXN0LTFfZkZvRDlzTEhaIiwiY29nbml0bzp1c2VybmFtZSI6ImNvdXJ0aWVyLmNvdXJ0aWVyIiwiZXhwIjoxNjA1NTIwOTYzLCJpYXQiOjE2MDU1MTczNjMsImVtYWlsIjoiY291cnRpZXJAY291cnRpZXIuY29tIn0.Xw2UK5kPNP-0E5aTt2IMEryn4pRLccFu0w23UH8Pft8fTIGy8UwXpH1xL3NvL5SImAGqN-vIEUPM0mtB53w96oJLEbBTmyusXVPydlW1AsXvZMjPtUadXZ7pqMaK1kvvLPcmdXtAXeQbwS6HvEuzXILcK2ApDqiu19r4B7Oju1W3WI-2xIVUsLkUr_TXLMUQJLYRZJEZwp-xGiQS0QDlLZ53Ba0_eb6zlNtRAHRyuHgflO0LqABliXeROFgfQ2OPWYwgoHQRRt0sFaIQ1DREUJ0qJPGr9K--fW3xTxC_Rtyoyxy2JU-73MxP2UYSTK0pwCZE1D9A8uR_TOX_gVBe8w",
+			"enabled": true
+		},
+		{
+			"key": "foundedEmail",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "currentEmail",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idUser",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idProject",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idDocument",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idPortfolios",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idPieces",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idSuivis",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idPartenaire",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idConversation",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idCategoriePieces",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "portfolioName",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "project",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "clientidProject",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "courtieridProject",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "emailUser",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "partenaireEmail",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "Iduser",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "senderID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "libelle",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "cognitoId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "activities",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "address",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "company",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "email",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "firstName",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "lastName",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "tel",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "pieceId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "uploaderID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idCategorie",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "MessageID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idNotification",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "objectID",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idModeles",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "idlistPieces",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-11-16T09:23:15.214Z",
+	"_postman_exported_using": "Postman/7.35.0"
+}

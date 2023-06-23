@@ -1,0 +1,7 @@
+aws_region                  = "eu-west-1"
+app_name                    = "ankan"
+provider_env_roles          = "arn:aws:iam::374782011268:role/OrganizationAccountAccessRole"
+tfstates_bucket             = "atn-tfstates"
+tfstates_idp_key            = "374782011268/projets/ankan/idp.tfstate"
+tfstates_domains_key        = "374782011268/projets/ankan/api.tfstate"
+source_folder               = "build-front/"
